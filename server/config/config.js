@@ -1,5 +1,5 @@
 /** Port configuration (for node API) */
-process.env.PORT = process.env.PORT || 6000;
+process.env.PORT = process.env.PORT || 8088;
 
 /**
  * Entorno NODE
