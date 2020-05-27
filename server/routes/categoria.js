@@ -30,7 +30,7 @@ app.get("/categoria", (req, res) => {
         });
       }
 
-      Categoria.count(
+      Categoria.countDocuments(
         {
           activa: true,
         },
