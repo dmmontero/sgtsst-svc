@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Schema = mongoose.Schema;
 /**
  * Esquema que representa un documento
  */
@@ -10,10 +10,11 @@ var documentoSchema = new mongoose.Schema({
     },
     descripcion: {
         type: String,
-        required: [true, 'El nombre es requerido']
+        required: [true, 'La descripcion es requerida']
     },
     ruta:{
-        type: String
+        type: String,
+        required: [true, 'La ruta es requerida']
     },
     activo: {
         type: Boolean,
