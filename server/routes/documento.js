@@ -101,7 +101,7 @@ app.post("/documento", (req, res) => {
     categoria: body.categoria,
     descripcion: body.descripcion,
     ruta: body.ruta,
-    usuarioCreador: body.usuario,
+    usuarioCreador: body.usuarioCreador,
   });
 
   documento.save((err, documentoDB) => {

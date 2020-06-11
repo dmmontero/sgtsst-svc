@@ -21,14 +21,16 @@ var documentoSchema = new mongoose.Schema({
         default: true
     },
     usuarioCreador:{
-        type: String
+        type: String,
+        default: ""
     },
     fechaCreacion:{
         type: Date,
         default: Date.now
     },
     usuarioModificador:{
-        type: String
+        type: String,
+        default: "",
     },
     fechaModificacion:{
         type: Date,
