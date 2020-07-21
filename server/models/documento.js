@@ -49,4 +49,4 @@ documentoSchema.methods.toJSON = function () {
 }
 
 //Export the model
-module.exports = mongoose.model('Docuemnto', documentoSchema, 'documentos');
+module.exports = mongoose.model('Documento', documentoSchema, 'documentos');

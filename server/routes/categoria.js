@@ -1,11 +1,11 @@
 const express = require("express");
 const Categoria = require("../models/categoria");
+const Documento = require("../models/documento");
 const {
   verificaToken,
   verificaAdminRole,
 } = require("../middleware/autenticacion");
 const app = express();
-const _ = require("underscore");
 
 /**
  * Obtener todos las categorias
@@ -77,6 +77,79 @@ app.post("/categoria", (req, res) => {
       caategoria: categoriaDB,
     });
   });
+});
+
+app.get("/categoria/documentos", (req, res) => {
+  let desde = req.query.desde || 0;
+  desde = Number(desde);
+
+  let limite = req.query.limite || 0;
+  limite = Number(limite);
+
+  let activo = req.query.activo || null;
+  let params = {};
+
+  params["activa"] = true;
+
+  Categoria.find(params)
+    .populate({
+      path: "documentos",
+      match: { activo: true },
+      limit: 1,
+    })
+    .skip(desde)
+    .limit(limite)
+    .exec((err, categorias) => {
+      if (err) {
+        return res.status(500).json({
+          err,
+        });
+      }
+
+      Categoria.countDocuments(
+        {
+          activa: true,
+        },
+        (err, count) => {
+          res.json({
+            ok: true,
+            categorias,
+            cuantas: count,
+          });
+        }
+      );
+    });
+});
+
+app.post("/categoria/inactivardocs/:categoria", (req, res) => {
+  let categoria = req.params.categoria;
+
+  const inactivarDocsCat = async (idCategoria) => {
+    const filter = { categoria: idCategoria },
+      update = { $set: { activo: true } },
+      opts = { new: true };
+
+    return Documento.updateMany(filter, update, opts);
+  };
+
+  const catDocs = async (idCategoria) => {
+    let catDocs = await inactivarDocsCat(idCategoria);
+    let docs = await Categoria.findById(idCategoria).populate("documentos");
+    return docs;
+  };
+
+  catDocs(categoria)
+    .then((result) => {
+      res.json({
+        ok: true,
+        data: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        err,
+      });
+    });
 });
 
 module.exports = app;
